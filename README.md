@@ -1,4 +1,6 @@
-# terraform-aws-step-functions
+![image info](logo.jpeg)
+
+# Terraform Step Functions
 
 This Terraform module creates an AWS Step Functions state machine that runs ECS tasks on Fargate. It also sets up the necessary IAM roles, policies, and CloudWatch event rules for scheduling execution.
 
@@ -42,10 +44,6 @@ retry_backoff_rate = 2
 # License
 
 This project is licensed under the MIT License.
-
-```
-
-```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
