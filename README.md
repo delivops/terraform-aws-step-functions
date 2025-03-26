@@ -93,32 +93,31 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_assign_public_ip"></a> [assign\_public\_ip](#input\_assign\_public\_ip) | Whether to assign a public IP to the task | `bool` | `false` | no |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region | `string` | `"us-east-1"` | no |
+| <a name="input_command"></a> [command](#input\_command) | Command for the container | `list(string)` | `[]` | no |
 | <a name="input_container_dependencies"></a> [container\_dependencies](#input\_container\_dependencies) | Container dependencies | <pre>list(object({<br/>    containerName = string<br/>    condition     = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_container_image"></a> [container\_image](#input\_container\_image) | Docker image for the container | `string` | `"nginx:latest"` | no |
-| <a name="input_container_name"></a> [container\_name](#input\_container\_name) | Name of the container | `string` | `"app"` | no |
 | <a name="input_container_port"></a> [container\_port](#input\_container\_port) | Container port to expose | `number` | `80` | no |
 | <a name="input_cpu"></a> [cpu](#input\_cpu) | CPU units for the task | `number` | `256` | no |
 | <a name="input_ecs_cluster_arn"></a> [ecs\_cluster\_arn](#input\_ecs\_cluster\_arn) | The ARN of the ECS cluster | `string` | n/a | yes |
+| <a name="input_entrypoint"></a> [entrypoint](#input\_entrypoint) | Entrypoint for the container | `list(string)` | `[]` | no |
 | <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | Environment variables for the container | <pre>list(object({<br/>    name  = string<br/>    value = string<br/>  }))</pre> | `[]` | no |
-| <a name="input_execution_role_arn"></a> [execution\_role\_arn](#input\_execution\_role\_arn) | ARN of the execution role | `string` | n/a | yes |
 | <a name="input_logs_enabled"></a> [logs\_enabled](#input\_logs\_enabled) | Whether to enable logging for the container | `bool` | `true` | no |
 | <a name="input_memory"></a> [memory](#input\_memory) | Memory for the task in MiB | `number` | `512` | no |
 | <a name="input_mount_points"></a> [mount\_points](#input\_mount\_points) | Mount points for the container | <pre>list(object({<br/>    sourceVolume  = string<br/>    containerPath = string<br/>    readOnly      = optional(bool, false)<br/>  }))</pre> | `[]` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name of the container | `string` | `"app"` | no |
 | <a name="input_network_mode"></a> [network\_mode](#input\_network\_mode) | Docker network mode for the container | `string` | `"awsvpc"` | no |
 | <a name="input_retry_attempts"></a> [retry\_attempts](#input\_retry\_attempts) | The number of attempts to retry the task | `number` | `3` | no |
 | <a name="input_retry_backoff_rate"></a> [retry\_backoff\_rate](#input\_retry\_backoff\_rate) | The rate at which the interval increases | `number` | `2` | no |
 | <a name="input_retry_interval_seconds"></a> [retry\_interval\_seconds](#input\_retry\_interval\_seconds) | The interval between retries in seconds | `number` | `10` | no |
-| <a name="input_runtime_platform"></a> [runtime\_platform](#input\_runtime\_platform) | Runtime platform configuration | <pre>object({<br/>    cpu_architecture       = optional(string, "ARM64")<br/>    operating_system_family = optional(string, "LINUX")<br/>  })</pre> | `{}` | no |
+| <a name="input_role_arn"></a> [role\_arn](#input\_role\_arn) | The ARN of the IAM role for the Step Functions state machine | `string` | n/a | yes |
+| <a name="input_runtime_platform"></a> [runtime\_platform](#input\_runtime\_platform) | Runtime platform configuration | <pre>object({<br/>    cpu_architecture        = optional(string, "ARM64")<br/>    operating_system_family = optional(string, "LINUX")<br/>  })</pre> | `{}` | no |
 | <a name="input_schedule_expression"></a> [schedule\_expression](#input\_schedule\_expression) | The schedule expression for the CloudWatch Event Rule | `string` | `"rate(1 minute)"` | no |
 | <a name="input_secrets"></a> [secrets](#input\_secrets) | Secrets to pass to the container | <pre>list(object({<br/>    name      = string<br/>    valueFrom = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | List of security group IDs for the ECS task | `list(string)` | n/a | yes |
-| <a name="input_step_function_name"></a> [step\_function\_name](#input\_step\_function\_name) | The name of the workflow | `string` | `"EcsFargateStateMachine"` | no |
-| <a name="input_step_function_policy_arn"></a> [step\_function\_policy\_arn](#input\_step\_function\_policy\_arn) | The ARN of the IAM policy for the Step Functions state machine | `string` | n/a | yes |
-| <a name="input_step_function_role_arn"></a> [step\_function\_role\_arn](#input\_step\_function\_role\_arn) | The ARN of the IAM role for the Step Functions state machine | `string` | n/a | yes |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | List of subnet IDs where the ECS task will run | `list(string)` | n/a | yes |
 | <a name="input_task_role_arn"></a> [task\_role\_arn](#input\_task\_role\_arn) | ARN of the task role | `string` | `null` | no |
 | <a name="input_timeout_seconds"></a> [timeout\_seconds](#input\_timeout\_seconds) | The time out for the state machine | `number` | `600` | no |
-| <a name="input_volumes"></a> [volumes](#input\_volumes) | Volumes to be used in the task definition | <pre>list(object({<br/>    name = string<br/>    host_path = optional(string)<br/>    efs_volume_configuration = optional(object({<br/>      file_system_id     = string<br/>      root_directory     = optional(string, "/")<br/>      transit_encryption = optional(string, "DISABLED")<br/>    }))<br/>  }))</pre> | `[]` | no |
+| <a name="input_volumes"></a> [volumes](#input\_volumes) | Volumes to be used in the task definition | <pre>list(object({<br/>    name      = string<br/>    host_path = optional(string)<br/>    efs_volume_configuration = optional(object({<br/>      file_system_id     = string<br/>      root_directory     = optional(string, "/")<br/>      transit_encryption = optional(string, "DISABLED")<br/>    }))<br/>  }))</pre> | `[]` | no |
 
 ## Outputs
 
