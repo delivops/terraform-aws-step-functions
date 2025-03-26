@@ -1,6 +1,6 @@
 resource "aws_sfn_state_machine" "ecs_state_machine" {
-  name     = var.step_function_name
-  role_arn = var.step_function_role_arn
+  name     = var.name
+  role_arn = var.role_arn
   definition = jsonencode({
     Comment        = "Run ECS/Fargate tasks",
     StartAt        = "RunTask",
@@ -34,12 +34,12 @@ resource "aws_sfn_state_machine" "ecs_state_machine" {
 }
 
 resource "aws_cloudwatch_event_rule" "schedule_rule" {
-  name                = "${var.step_function_name}-schedule-rule"
+  name                = "${var.name}-schedule-rule"
   schedule_expression = var.schedule_expression
 }
 
 resource "aws_cloudwatch_event_target" "state_machine_target" {
   rule     = aws_cloudwatch_event_rule.schedule_rule.name
   arn      = aws_sfn_state_machine.ecs_state_machine.arn
-  role_arn = var.step_function_role_arn
+  role_arn = var.role_arn
 }

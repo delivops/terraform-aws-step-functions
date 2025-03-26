@@ -1,13 +1,13 @@
 
 
 resource "aws_ecs_task_definition" "this" {
-  family                   = var.step_function_name
+  family                   = var.name
   requires_compatibilities = ["FARGATE"]
   network_mode             = var.network_mode
   cpu                      = var.cpu
   memory                   = var.memory
-  execution_role_arn       = var.execution_role_arn
-  task_role_arn            = coalesce(var.task_role_arn, var.execution_role_arn)
+  execution_role_arn       = var.task_role_arn
+  task_role_arn            = coalesce(var.task_role_arn)
 
   dynamic "runtime_platform" {
     for_each = var.runtime_platform != null ? [var.runtime_platform] : []
@@ -36,12 +36,12 @@ resource "aws_ecs_task_definition" "this" {
   }
 
   container_definitions = jsonencode([{
-    name  = var.container_name
+    name  = var.name
     image = var.container_image
     cpu   = 0
 
     portMappings = [{
-      name          = var.container_name
+      name          = var.name
       containerPort = var.container_port
       hostPort      = var.container_port
       protocol      = "tcp"
@@ -49,7 +49,8 @@ resource "aws_ecs_task_definition" "this" {
     }]
 
     essential = true
-
+    entryPoint = var.entrypoint
+    command = var.command
     environment = var.environment_variables
 
     secrets = var.secrets
@@ -59,7 +60,7 @@ resource "aws_ecs_task_definition" "this" {
     logConfiguration = var.logs_enabled ? {
       logDriver = "awslogs"
       options = {
-        "awslogs-group"         = "/ecs/${var.step_function_name}"
+        "awslogs-group"         = "/ecs/${var.name}"
         "awslogs-region"        = var.aws_region
         "mode"                  = "non-blocking"
         "awslogs-create-group"  = "true"
@@ -73,45 +74,7 @@ resource "aws_ecs_task_definition" "this" {
   }])
 
   tags = {
-    Name = var.step_function_name
+    Name = var.name
   }
 }
 
-# Option 1: Using AWS Secrets Manager
-# resource "aws_secretsmanager_secret" "slack_webhook" {
-#   name = "slack-webhook-url"
-# }
-
-# resource "aws_secretsmanager_secret_version" "slack_webhook" {
-#   secret_id = aws_secretsmanager_secret.slack_webhook.id
-#   secret_string = jsonencode({
-#     SLACK_WEBHOOK_URL = "https://hooks.slack.com/services/your-webhook-url"
-#   })
-# }
-
-# # Option 2: Using AWS Systems Manager Parameter Store
-# resource "aws_ssm_parameter" "slack_webhook" {
-#   name  = "/myapp/slack/webhook-url"
-#   type  = "SecureString"
-#   value = "https://hooks.slack.com/services/your-webhook-url"
-# }
-
-# # Updated module usage with secrets
-# module "python_task_definition_with_secrets" {
-#   source = "./modules/ecs_task_definition"
-
-#   # ... other configurations ...
-
-#   secrets = [
-#     # Secrets Manager example
-#     {
-#       name      = "SLACK_WEBHOOK_URL"
-#       valueFrom = "${aws_secretsmanager_secret.slack_webhook.arn}:SLACK_WEBHOOK_URL::"
-#     },
-#     # SSM Parameter Store example
-#     {
-#       name      = "SLACK_WEBHOOK_URL_SSM"
-#       valueFrom = aws_ssm_parameter.slack_webhook.arn
-#     }
-#   ]
-# }

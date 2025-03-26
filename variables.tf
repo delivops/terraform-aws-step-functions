@@ -1,31 +1,21 @@
-variable "step_function_name" {
-  description = "The name of the workflow"
-  type        = string
-  default     = "EcsFargateStateMachine"
-}
-variable "step_function_role_arn" {
+variable "role_arn" {
   description = "The ARN of the IAM role for the Step Functions state machine"
-  type        = string
-
-}
-variable "step_function_policy_arn" {
-  description = "The ARN of the IAM policy for the Step Functions state machine"
   type        = string
 
 }
 
 ##########ECS#####################
 
-variable "container_name" {
+variable "name" {
   description = "Name of the container"
   type        = string
-  default = "app"
+  default     = "app"
 }
 
 variable "container_image" {
   description = "Docker image for the container"
   type        = string
-  default = "nginx:latest"
+  default     = "nginx:latest"
 }
 
 variable "container_port" {
@@ -46,18 +36,23 @@ variable "memory" {
   default     = 512
 }
 
-variable "execution_role_arn" {
-  description = "ARN of the execution role"
-  type        = string
-
-}
-
 variable "task_role_arn" {
   description = "ARN of the task role"
   type        = string
   default     = null
 }
-
+variable "entrypoint" {
+  description = "Entrypoint for the container"
+  type        = list(string)
+  default     = []
+  
+}
+variable "command" {
+  description = "Command for the container"
+  type        = list(string)
+  default     = []
+  
+}
 variable "network_mode" {
   description = "Docker network mode for the container"
   type        = string
@@ -96,7 +91,7 @@ variable "mount_points" {
 variable "volumes" {
   description = "Volumes to be used in the task definition"
   type = list(object({
-    name = string
+    name      = string
     host_path = optional(string)
     efs_volume_configuration = optional(object({
       file_system_id     = string
@@ -110,7 +105,7 @@ variable "volumes" {
 variable "runtime_platform" {
   description = "Runtime platform configuration"
   type = object({
-    cpu_architecture       = optional(string, "ARM64")
+    cpu_architecture        = optional(string, "ARM64")
     operating_system_family = optional(string, "LINUX")
   })
   default = {}
@@ -129,7 +124,7 @@ variable "logs_enabled" {
   description = "Whether to enable logging for the container"
   type        = bool
   default     = true
-  
+
 }
 
 variable "aws_region" {
