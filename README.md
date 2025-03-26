@@ -64,16 +64,15 @@ module "step_function" {
 This project is licensed under the MIT License.
 
 <!-- BEGIN_TF_DOCS -->
-
 ## Requirements
 
 No requirements.
 
 ## Providers
 
-| Name                                             | Version |
-| ------------------------------------------------ | ------- |
-| <a name="provider_aws"></a> [aws](#provider_aws) | n/a     |
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
 
 ## Modules
 
@@ -81,42 +80,47 @@ No modules.
 
 ## Resources
 
-| Name                                                                                                                                                              | Type     |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| [aws_cloudwatch_event_target.state_machine_target](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)           | resource |
-| [aws_iam_policy.event_rule_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy)                                        | resource |
-| [aws_iam_policy.state_machine_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy)                                     | resource |
-| [aws_iam_role_policy_attachment.event_rule_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment)    | resource |
-| [aws_iam_role_policy_attachment.state_machine_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_sfn_state_machine.ecs_state_machine](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sfn_state_machine)                          | resource |
+| Name | Type |
+|------|------|
+| [aws_cloudwatch_event_rule.schedule_rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
+| [aws_cloudwatch_event_target.state_machine_target](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
+| [aws_ecs_task_definition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition) | resource |
+| [aws_sfn_state_machine.ecs_state_machine](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sfn_state_machine) | resource |
 
 ## Inputs
 
-| Name                                                                                                         | Description                                              | Type           | Default                      | Required |
-| ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------- | -------------- | ---------------------------- | :------: |
-| <a name="input_ecs_cluster_arn"></a> [ecs_cluster_arn](#input_ecs_cluster_arn)                               | The ARN of the ECS cluster                               | `string`       | n/a                          |   yes    |
-| <a name="input_event_rule_policy_name"></a> [event_rule_policy_name](#input_event_rule_policy_name)          | The name of the IAM policy for the CloudWatch Event Rule | `string`       | `"EventRulePolicy"`          |    no    |
-| <a name="input_event_rule_role_arn"></a> [event_rule_role_arn](#input_event_rule_role_arn)                   | The ARN of the IAM role for the CloudWatch Event Rule    | `string`       | n/a                          |   yes    |
-| <a name="input_private_subnets"></a> [private_subnets](#input_private_subnets)                               | List of private subnets                                  | `list(string)` | n/a                          |   yes    |
-| <a name="input_retry_attempts"></a> [retry_attempts](#input_retry_attempts)                                  | The number of attempts to retry the task                 | `number`       | `3`                          |    no    |
-| <a name="input_retry_backoff_rate"></a> [retry_backoff_rate](#input_retry_backoff_rate)                      | The rate at which the interval increases                 | `number`       | `2`                          |    no    |
-| <a name="input_retry_interval"></a> [retry_interval](#input_retry_interval)                                  | The interval between retries in seconds                  | `number`       | `10`                         |    no    |
-| <a name="input_schedule_expression"></a> [schedule_expression](#input_schedule_expression)                   | The schedule expression for the CloudWatch Event Rule    | `string`       | `"rate(1 day)"`              |    no    |
-| <a name="input_schedule_rule_name"></a> [schedule_rule_name](#input_schedule_rule_name)                      | The name of the CloudWatch Event Rule                    | `string`       | `"StateMachineScheduleRule"` |    no    |
-| <a name="input_security_group_ids"></a> [security_group_ids](#input_security_group_ids)                      | List of security group IDs for the ECS tasks             | `list(string)` | n/a                          |   yes    |
-| <a name="input_state_machine_name"></a> [state_machine_name](#input_state_machine_name)                      | The name of the Step Functions state machine             | `string`       | `"EcsFargateStateMachine"`   |    no    |
-| <a name="input_state_machine_policy_name"></a> [state_machine_policy_name](#input_state_machine_policy_name) | The name of the IAM policy for the state machine         | `string`       | `"StateMachinePolicy"`       |    no    |
-| <a name="input_state_machine_role_arn"></a> [state_machine_role_arn](#input_state_machine_role_arn)          | The ARN of the IAM role for the state machine            | `string`       | n/a                          |   yes    |
-| <a name="input_task_definition_arn"></a> [task_definition_arn](#input_task_definition_arn)                   | The ARN of the ECS task definition                       | `string`       | n/a                          |   yes    |
-| <a name="input_task_execution_role_arn"></a> [task_execution_role_arn](#input_task_execution_role_arn)       | The ARN of the ECS task execution role                   | `string`       | n/a                          |   yes    |
-| <a name="input_task_role_arn"></a> [task_role_arn](#input_task_role_arn)                                     | The ARN of the ECS task role                             | `string`       | n/a                          |   yes    |
-| <a name="input_time_out"></a> [time_out](#input_time_out)                                                    | The time out for the state machine                       | `number`       | `600`                        |    no    |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_assign_public_ip"></a> [assign\_public\_ip](#input\_assign\_public\_ip) | Whether to assign a public IP to the task | `bool` | `false` | no |
+| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region | `string` | `"us-east-1"` | no |
+| <a name="input_container_dependencies"></a> [container\_dependencies](#input\_container\_dependencies) | Container dependencies | <pre>list(object({<br/>    containerName = string<br/>    condition     = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_container_image"></a> [container\_image](#input\_container\_image) | Docker image for the container | `string` | `"nginx:latest"` | no |
+| <a name="input_container_name"></a> [container\_name](#input\_container\_name) | Name of the container | `string` | `"app"` | no |
+| <a name="input_container_port"></a> [container\_port](#input\_container\_port) | Container port to expose | `number` | `80` | no |
+| <a name="input_cpu"></a> [cpu](#input\_cpu) | CPU units for the task | `number` | `256` | no |
+| <a name="input_ecs_cluster_arn"></a> [ecs\_cluster\_arn](#input\_ecs\_cluster\_arn) | The ARN of the ECS cluster | `string` | n/a | yes |
+| <a name="input_environment_variables"></a> [environment\_variables](#input\_environment\_variables) | Environment variables for the container | <pre>list(object({<br/>    name  = string<br/>    value = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_execution_role_arn"></a> [execution\_role\_arn](#input\_execution\_role\_arn) | ARN of the execution role | `string` | n/a | yes |
+| <a name="input_logs_enabled"></a> [logs\_enabled](#input\_logs\_enabled) | Whether to enable logging for the container | `bool` | `true` | no |
+| <a name="input_memory"></a> [memory](#input\_memory) | Memory for the task in MiB | `number` | `512` | no |
+| <a name="input_mount_points"></a> [mount\_points](#input\_mount\_points) | Mount points for the container | <pre>list(object({<br/>    sourceVolume  = string<br/>    containerPath = string<br/>    readOnly      = optional(bool, false)<br/>  }))</pre> | `[]` | no |
+| <a name="input_network_mode"></a> [network\_mode](#input\_network\_mode) | Docker network mode for the container | `string` | `"awsvpc"` | no |
+| <a name="input_retry_attempts"></a> [retry\_attempts](#input\_retry\_attempts) | The number of attempts to retry the task | `number` | `3` | no |
+| <a name="input_retry_backoff_rate"></a> [retry\_backoff\_rate](#input\_retry\_backoff\_rate) | The rate at which the interval increases | `number` | `2` | no |
+| <a name="input_retry_interval_seconds"></a> [retry\_interval\_seconds](#input\_retry\_interval\_seconds) | The interval between retries in seconds | `number` | `10` | no |
+| <a name="input_runtime_platform"></a> [runtime\_platform](#input\_runtime\_platform) | Runtime platform configuration | <pre>object({<br/>    cpu_architecture       = optional(string, "ARM64")<br/>    operating_system_family = optional(string, "LINUX")<br/>  })</pre> | `{}` | no |
+| <a name="input_schedule_expression"></a> [schedule\_expression](#input\_schedule\_expression) | The schedule expression for the CloudWatch Event Rule | `string` | `"rate(1 minute)"` | no |
+| <a name="input_secrets"></a> [secrets](#input\_secrets) | Secrets to pass to the container | <pre>list(object({<br/>    name      = string<br/>    valueFrom = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | List of security group IDs for the ECS task | `list(string)` | n/a | yes |
+| <a name="input_step_function_name"></a> [step\_function\_name](#input\_step\_function\_name) | The name of the workflow | `string` | `"EcsFargateStateMachine"` | no |
+| <a name="input_step_function_policy_arn"></a> [step\_function\_policy\_arn](#input\_step\_function\_policy\_arn) | The ARN of the IAM policy for the Step Functions state machine | `string` | n/a | yes |
+| <a name="input_step_function_role_arn"></a> [step\_function\_role\_arn](#input\_step\_function\_role\_arn) | The ARN of the IAM role for the Step Functions state machine | `string` | n/a | yes |
+| <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | List of subnet IDs where the ECS task will run | `list(string)` | n/a | yes |
+| <a name="input_task_role_arn"></a> [task\_role\_arn](#input\_task\_role\_arn) | ARN of the task role | `string` | `null` | no |
+| <a name="input_timeout_seconds"></a> [timeout\_seconds](#input\_timeout\_seconds) | The time out for the state machine | `number` | `600` | no |
+| <a name="input_volumes"></a> [volumes](#input\_volumes) | Volumes to be used in the task definition | <pre>list(object({<br/>    name = string<br/>    host_path = optional(string)<br/>    efs_volume_configuration = optional(object({<br/>      file_system_id     = string<br/>      root_directory     = optional(string, "/")<br/>      transit_encryption = optional(string, "DISABLED")<br/>    }))<br/>  }))</pre> | `[]` | no |
 
 ## Outputs
 
-| Name                                                                                   | Description                          |
-| -------------------------------------------------------------------------------------- | ------------------------------------ |
-| <a name="output_rule_arn"></a> [rule_arn](#output_rule_arn)                            | The ARN of the CloudWatch Event rule |
-| <a name="output_state_machine_arn"></a> [state_machine_arn](#output_state_machine_arn) | The ARN of the created state machine |
-
+No outputs.
 <!-- END_TF_DOCS -->
